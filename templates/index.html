@@ -1,99 +1,145 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Multi-Tool Hub - Free Online Tools</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>SwiftTools - Free Online Image & PDF Toolkit</title>
     <style>
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .hero-section { background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white; padding: 40px 0; margin-bottom: 40px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
-        .tool-card { border: none; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s; background: white; }
-        .tool-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
-        .btn-custom { border-radius: 8px; padding: 10px 20px; font-weight: 600; width: 100%; }
-        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
+        :root {
+            --primary-color: #4F46E5;
+            --primary-hover: #4338CA;
+            --bg-color: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --text-main: #111827;
+            --text-sub: #6B7280;
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container { 
+            max-width: 700px; 
+            margin: 0 auto; 
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .header p {
+            color: var(--text-sub);
+            font-size: 1.1rem;
+        }
+        .tool-card { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: 25px;
+            text-align: left;
+            transition: transform 0.2s;
+        }
+        .tool-card:hover {
+            transform: translateY(-2px);
+        }
+        .tool-card h3 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            color: var(--text-main);
+        }
+        .tool-card p {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+        .file-input-wrapper {
+            margin-bottom: 15px;
+        }
+        input[type="file"] { 
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #F3F4F6;
+            border-radius: 6px;
+            border: 1px dashed #D1D5DB;
+            cursor: pointer;
+        }
+        button { 
+            background-color: var(--primary-color); 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer; 
+            border-radius: 6px; 
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        button:hover { 
+            background-color: var(--primary-hover); 
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
-
-    <!-- Loading Screen -->
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
-        <h5 class="mt-3 text-secondary">फाइल प्रोसेस हो रही है, कृपया प्रतीक्षा करें...</h5>
-    </div>
-
-    <!-- Hero Section -->
-    <div class="hero-section text-center">
-        <div class="container">
-            <h1 class="display-5 fw-bold">AI Multi-Tool Hub</h1>
-            <p class="lead">बिना किसी शुल्क के इमेज बैकग्राउंड हटाएँ, फोटो साफ़ करें और PDF कन्वर्ट करें</p>
+    <div class="container">
+        <div class="header">
+            <h1>SwiftTools AI</h1>
+            <p>Free, fast, and secure web tools for your daily tasks.</p>
         </div>
-    </div>
 
-    <!-- Main Content -->
-    <div class="container mb-5">
-        <div class="row g-4">
-            
-            <!-- Tool 1: Background Remover -->
-            <div class="col-md-4">
-                <div class="card tool-card h-100 p-4">
-                    <div class="text-center mb-3">
-                        <span style="font-size: 3rem;">🖼️</span>
-                        <h4 class="card-title mt-2 fw-bold">Background Remover</h4>
-                        <p class="text-muted small">इमेज का बैकग्राउंड 1-क्लिक में हटाकर transparent PNG पाएं</p>
-                    </div>
-                    <form action="/remove-bg" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
-                        <div class="mb-3">
-                            <input class="form-control" type="file" name="image" accept="image/*" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-custom">बैकग्राउंड हटाएँ</button>
-                    </form>
+        <!-- Tool 1: Background Remover -->
+        <div class="tool-card">
+            <h3>1. AI Background Remover</h3>
+            <p>Instantly isolate your subject and remove solid backgrounds seamlessly.</p>
+            <form action="/remove-bg" method="post" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                    <input type="file" name="image" accept="image/*" required>
                 </div>
-            </div>
-
-            <!-- Tool 2: Image Enhancer -->
-            <div class="col-md-4">
-                <div class="card tool-card h-100 p-4">
-                    <div class="text-center mb-3">
-                        <span style="font-size: 3rem;">✨</span>
-                        <h4 class="card-title mt-2 fw-bold">Image Enhancer</h4>
-                        <p class="text-muted small">धुंधली या कम क्वालिटी की फोटो को साफ़ और शार्प बनाएं</p>
-                    </div>
-                    <form action="/clear-image" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
-                        <div class="mb-3">
-                            <input class="form-control" type="file" name="image" accept="image/*" required>
-                        </div>
-                        <button type="submit" class="btn btn-success btn-custom">फोटो साफ़ करें</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Tool 3: PDF to Image -->
-            <div class="col-md-4">
-                <div class="card tool-card h-100 p-4">
-                    <div class="text-center mb-3">
-                        <span style="font-size: 3rem;">📄</span>
-                        <h4 class="card-title mt-2 fw-bold">PDF to Image</h4>
-                        <p class="text-muted small">अपने PDF दस्तावेज़ के पहले पेज को हाई-क्वालिटी PNG में बदलें</p>
-                    </div>
-                    <form action="/pdf-to-img" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
-                        <div class="mb-3">
-                            <input class="form-control" type="file" name="pdf" accept=".pdf" required>
-                        </div>
-                        <button type="submit" class="btn btn-dark btn-custom">PDF कन्वर्ट करें</button>
-                    </form>
-                </div>
-            </div>
-
+                <button type="submit">Remove Background</button>
+            </form>
         </div>
-    </div>
 
-    <!-- Script for Loading Animation -->
-    <script>
-        function showLoading() {
-            document.getElementById('loadingOverlay').style.display = 'flex';
-        }
-    </script>
+        <!-- Tool 2: Image Enhancer -->
+        <div class="tool-card">
+            <h3>2. Smart Image Enhancer</h3>
+            <p>Fix blurry photos by increasing sharpness and optimizing clarity.</p>
+            <form action="/clear-image" method="post" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                    <input type="file" name="image" accept="image/*" required>
+                </div>
+                <button type="submit">Enhance Quality</button>
+            </form>
+        </div>
+
+        <!-- Tool 3: PDF Converter -->
+        <div class="tool-card">
+            <h3>3. PDF Text Extractor</h3>
+            <p>Convert and extract readable text from your PDF files instantly.</p>
+            <form action="/pdf-to-img" method="post" enctype="multipart/form-data">
+                <div class="file-input-wrapper">
+                    <input type="file" name="pdf" accept=".pdf" required>
+                </div>
+                <button type="submit">Extract Text</button>
+            </form>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 SwiftTools AI. All rights reserved.</p>
+        </footer>
+    </div>
 </body>
 </html>
