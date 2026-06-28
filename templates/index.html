@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Multi-Tool Hub - Free Online Tools</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .hero-section { background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white; padding: 40px 0; margin-bottom: 40px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+        .tool-card { border: none; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s; background: white; }
+        .tool-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .btn-custom { border-radius: 8px; padding: 10px 20px; font-weight: 600; width: 100%; }
+        .loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+        <h5 class="mt-3 text-secondary">फाइल प्रोसेस हो रही है, कृपया प्रतीक्षा करें...</h5>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-5 fw-bold">AI Multi-Tool Hub</h1>
+            <p class="lead">बिना किसी शुल्क के इमेज बैकग्राउंड हटाएँ, फोटो साफ़ करें और PDF कन्वर्ट करें</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mb-5">
+        <div class="row g-4">
+            
+            <!-- Tool 1: Background Remover -->
+            <div class="col-md-4">
+                <div class="card tool-card h-100 p-4">
+                    <div class="text-center mb-3">
+                        <span style="font-size: 3rem;">🖼️</span>
+                        <h4 class="card-title mt-2 fw-bold">Background Remover</h4>
+                        <p class="text-muted small">इमेज का बैकग्राउंड 1-क्लिक में हटाकर transparent PNG पाएं</p>
+                    </div>
+                    <form action="/remove-bg" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
+                        <div class="mb-3">
+                            <input class="form-control" type="file" name="image" accept="image/*" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-custom">बैकग्राउंड हटाएँ</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tool 2: Image Enhancer -->
+            <div class="col-md-4">
+                <div class="card tool-card h-100 p-4">
+                    <div class="text-center mb-3">
+                        <span style="font-size: 3rem;">✨</span>
+                        <h4 class="card-title mt-2 fw-bold">Image Enhancer</h4>
+                        <p class="text-muted small">धुंधली या कम क्वालिटी की फोटो को साफ़ और शार्प बनाएं</p>
+                    </div>
+                    <form action="/clear-image" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
+                        <div class="mb-3">
+                            <input class="form-control" type="file" name="image" accept="image/*" required>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-custom">फोटो साफ़ करें</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tool 3: PDF to Image -->
+            <div class="col-md-4">
+                <div class="card tool-card h-100 p-4">
+                    <div class="text-center mb-3">
+                        <span style="font-size: 3rem;">📄</span>
+                        <h4 class="card-title mt-2 fw-bold">PDF to Image</h4>
+                        <p class="text-muted small">अपने PDF दस्तावेज़ के पहले पेज को हाई-क्वालिटी PNG में बदलें</p>
+                    </div>
+                    <form action="/pdf-to-img" method="post" enctype="multipart/form-data" onsubmit="showLoading()">
+                        <div class="mb-3">
+                            <input class="form-control" type="file" name="pdf" accept=".pdf" required>
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-custom">PDF कन्वर्ट करें</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script for Loading Animation -->
+    <script>
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
