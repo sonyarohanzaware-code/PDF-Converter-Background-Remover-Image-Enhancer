@@ -1,5 +1,5 @@
 Flask==3.0.2
-rembg[cpu]==2.0.56
+rembg[cpu]
 Pillow==10.2.0
 pypdf==4.1.0
 gunicorn
