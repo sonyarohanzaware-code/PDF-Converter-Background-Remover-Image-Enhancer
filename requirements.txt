@@ -1,5 +1,4 @@
 Flask
-rembg[cpu]
 Pillow
 pypdf
 gunicorn
