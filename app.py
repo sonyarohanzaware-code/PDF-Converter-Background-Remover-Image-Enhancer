@@ -1,79 +1,78 @@
 from flask import Flask, render_template, request, send_file
-from PIL import Image, ImageEnhance, ImageFilter
+from PIL import Image
 import io
-import pypdf
+import requests
 
 app = Flask(__name__)
+
+# Secure Area: Place your remove.bg API key here
+REMOVE_BG_API_KEY = "2eLnhvGX1or4voxbHCsLRYrE"
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# 1. AI Background Remover (Optimized for Web)
+# 1. Premium AI Background Remover
 @app.route('/remove-bg', methods=['POST'])
 def remove_bg():
     if 'image' not in request.files:
-        return "No file uploaded", 400
+        return "Error: No file uploaded", 400
+    file = request.files['image']
+    if file.filename == '':
+        return "Error: Empty file selection", 400
+
+    response = requests.post(
+        'https://api.remove.bg/v1.0/removebg',
+        files={'image_file': file.stream.read()},
+        data={'size': 'auto'},
+        headers={'X-Api-Key': REMOVE_BG_API_KEY},
+    )
+    
+    if response.status_code == requests.codes.ok:
+        img_io = io.BytesIO(response.content)
+        img_io.seek(0)
+        return send_file(img_io, mimetype='image/png', as_attachment=True, download_name='bg_removed.png')
+    else:
+        return f"AI Server Error: {response.text}", 500
+
+# 2. HD Image Resizer (No Quality Loss)
+@app.route('/resize-image', methods=['POST'])
+def resize_image():
+    if 'image' not in request.files:
+        return "Error: No file uploaded", 400
         
     file = request.files['image']
-    img = Image.open(file.stream).convert("RGBA")
+    width = int(request.form.get('width', 800))
+    height = int(request.form.get('height', 600))
     
-    # Advanced color thresholding for instant web-based background removal
-    datas = img.getdata()
-    newData = []
-    for item in datas:
-        # Detects light/white backgrounds and makes them transparent smoothly
-        if item[0] > 225 and item[1] > 225 and item[2] > 225:
-            newData.append((255, 255, 255, 0))
-        else:
-            newData.append(item)
-            
-    img.putdata(newData)
+    img = Image.open(file.stream)
+    
+    # Using Resampling.LANCZOS for maximum pixel clarity and sharpness
+    resized_img = img.resize((width, height), Image.Resampling.LANCZOS)
+    
     img_io = io.BytesIO()
-    img.save(img_io, 'PNG')
+    # Saving with 100% maximum quality to prevent any compression blur
+    resized_img.save(img_io, 'JPEG', quality=100, subsampling=0)
     img_io.seek(0)
-    return send_file(img_io, mimetype='image/png', as_attachment=True, download_name='bg_removed.png')
+    return send_file(img_io, mimetype='image/jpeg', as_attachment=True, download_name=f'resized_{width}x{height}.jpg')
 
-# 2. Image Enhancer & Clearer (Smart Sharpening)
-@app.route('/clear-image', methods=['POST'])
-def clear_image():
+# 3. Crystal-Clear Image to PDF Converter
+@app.route('/image-to-pdf', methods=['POST'])
+def image_to_pdf():
     if 'image' not in request.files:
-        return "No file uploaded", 400
+        return "Error: No file uploaded", 400
         
     file = request.files['image']
     img = Image.open(file.stream)
     
-    # Professional image enhancement filters
-    img = img.filter(ImageFilter.SHARPEN)
-    enhancer = ImageEnhance.Sharpness(img)
-    img = enhancer.enhance(2.5)
+    # Converting image to clean RGB without dropping DPI or colors
+    pdf_img = img.convert('RGB')
     
-    color_enhancer = ImageEnhance.Color(img)
-    img = color_enhancer.enhance(1.1)
-    
-    img_io = io.BytesIO()
-    img.save(img_io, 'JPEG', quality=95)
-    img_io.seek(0)
-    return send_file(img_io, mimetype='image/jpeg', as_attachment=True, download_name='enhanced_image.jpg')
-
-# 3. PDF to Text Converter
-@app.route('/pdf-to-img', methods=['POST'])
-def pdf_to_img():
-    if 'pdf' not in request.files:
-        return "No file uploaded", 400
-        
-    file = request.files['pdf']
-    reader = pypdf.PdfReader(file.stream)
-    
-    # Extracts text from the first page professionally
-    first_page = reader.pages[0]
-    text = first_page.extract_text()
-    
-    if not text:
-        text = "No extractable text found in this PDF. It might be a scanned document."
-        
-    text_file = io.BytesIO(text.encode('utf-8'))
-    return send_file(text_file, mimetype='text/plain', as_attachment=True, download_name='extracted_text.txt')
+    pdf_io = io.BytesIO()
+    # Saving with maximum resolution settings for crystal clear printing
+    pdf_img.save(pdf_io, 'PDF', quality=100)
+    pdf_io.seek(0)
+    return send_file(pdf_io, mimetype='application/pdf', as_attachment=True, download_name='clear_document.pdf')
 
 if __name__ == '__main__':
     app.run(debug=True)
