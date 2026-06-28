@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, send_file
-from rembg import remove
-from PIL import Image, ImageEnhance
+from PIL import Image, ImageEnhance, ImageFilter
 import io
 import pypdf
 
@@ -10,81 +9,58 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-# 1. Advanced Background Remover Logic
+# 1. Background Remover (Halki Alternative Process)
 @app.route('/remove-bg', methods=['POST'])
 def remove_bg():
-    try:
-        file = request.files['image']
-        if not file:
-            return "No file uploaded", 400
+    file = request.files['image']
+    img = Image.open(file.stream).convert("RGBA")
+    
+    # फ्री सर्वर के लिए एक स्मार्ट ट्रिक: यह इमेज के सबसे कॉमन बैकग्राउंड कलर (जैसे सफेद/काला) को ट्रांसपेरेंट कर देगा
+    datas = img.getdata()
+    newData = []
+    for item in datas:
+        # अगर पिक्सेल बहुत ज्यादा सफेद या हल्के रंग का है, तो उसे गायब कर दो
+        if item[0] > 220 and item[1] > 220 and item[2] > 220:
+            newData.append((255, 255, 255, 0))
+        else:
+            newData.append(item)
             
-        input_image = Image.open(file.stream)
-        output_image = remove(input_image)
-        
-        img_io = io.BytesIO()
-        output_image.save(img_io, 'PNG')
-        img_io.seek(0)
-        return send_file(img_io, mimetype='image/png', as_attachment=True, download_name='transparent-bg.png')
-    except Exception as e:
-        return f"Error processing background removal: {str(e)}", 500
+    img.putdata(newData)
+    img_io = io.BytesIO()
+    img.save(img_io, 'PNG')
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/png', as_attachment=True, download_name='no-bg.png')
 
-# 2. Advanced Image Enhancer (Sharpness + Contrast + Color)
+# 2. Image Clear / Sharpness (Super Fast & Light)
 @app.route('/clear-image', methods=['POST'])
 def clear_image():
-    try:
-        file = request.files['image']
-        if not file:
-            return "No file uploaded", 400
-            
-        img = Image.open(file.stream)
-        
-        # Step A: Increase Sharpness (3.5x for crisp clarity)
-        sharp_enhancer = ImageEnhance.Sharpness(img)
-        img = sharp_enhancer.enhance(3.5)
-        
-        # Step B: Auto Contrast Enhancement
-        contrast_enhancer = ImageEnhance.Contrast(img)
-        img = contrast_enhancer.enhance(1.2)
-        
-        # Step C: Subtle Color Boost
-        color_enhancer = ImageEnhance.Color(img)
-        img = color_enhancer.enhance(1.15)
-        
-        img_io = io.BytesIO()
-        img.save(img_io, 'JPEG', quality=95)
-        img_io.seek(0)
-        return send_file(img_io, mimetype='image/jpeg', as_attachment=True, download_name='enhanced-image.jpg')
-    except Exception as e:
-        return f"Error enhancing image: {str(e)}", 500
+    file = request.files['image']
+    img = Image.open(file.stream)
+    
+    # इमेज को शार्प और क्लियर करने का लाइटवेट तरीका
+    img = img.filter(ImageFilter.SHARPEN)
+    enhancer = ImageEnhance.Sharpness(img)
+    img = enhancer.enhance(2.5)
+    
+    img_io = io.BytesIO()
+    img.save(img_io, 'JPEG', quality=95)
+    img_io.seek(0)
+    return send_file(img_io, mimetype='image/jpeg', as_attachment=True, download_name='clear-image.jpg')
 
-# 3. Smart PDF to Image Extractor
+# 3. PDF to Text
 @app.route('/pdf-to-img', methods=['POST'])
 def pdf_to_img():
-    try:
-        file = request.files['pdf']
-        if not file:
-            return "No file uploaded", 400
-            
-        reader = pypdf.PdfReader(file.stream)
-        first_page = reader.pages[0]
+    file = request.files['pdf']
+    reader = pypdf.PdfReader(file.stream)
+    
+    first_page = reader.pages[0]
+    text = first_page.extract_text()
+    
+    if not text:
+        text = "PDF में कोई टेक्स्ट नहीं मिला या यह एक स्कैन की गई इमेज है।"
         
-        # PDF के पहले पेज के अंदर से अगर कोई इमेज ऑब्जेक्ट मौजूद है, तो उसे सीधे बाहर निकालता है
-        if len(first_page.images) > 0:
-            pdf_img = first_page.images[0]
-            img_io = io.BytesIO(pdf_img.data)
-            return send_file(img_io, mimetype='image/png', as_attachment=True, download_name='pdf-page.png')
-        
-        # अगर सिर्फ टेक्स्ट डॉक्यूमेंट है, तो उसका टेक्स्ट निकालकर सीधे एक इमेज बनाकर डिलीवर करता है
-        else:
-            text = first_page.extract_text() or "Blank PDF Page"
-            img = Image.new('RGB', (800, 1000), color=(255, 255, 255))
-            img_io = io.BytesIO()
-            img.save(img_io, 'PNG')
-            img_io.seek(0)
-            return send_file(img_io, mimetype='image/png', as_attachment=True, download_name='pdf-converted-page.png')
-            
-    except Exception as e:
-        return f"Error converting PDF: {str(e)}", 500
+    text_file = io.BytesIO(text.encode('utf-8'))
+    return send_file(text_file, mimetype='text/plain', as_attachment=True, download_name='pdf-text.txt')
 
 if __name__ == '__main__':
     app.run(debug=True)
