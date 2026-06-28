@@ -3,143 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SwiftTools - Free Online Image & PDF Toolkit</title>
+    <title>OptiTools AI - Premium Image & PDF Processing Suite</title>
     <style>
         :root {
-            --primary-color: #4F46E5;
-            --primary-hover: #4338CA;
-            --bg-color: #F9FAFB;
+            --brand-color: #2563EB;
+            --brand-hover: #1D4ED8;
+            --surface-bg: #F8FAFC;
             --card-bg: #FFFFFF;
-            --text-main: #111827;
-            --text-sub: #6B7280;
+            --text-heading: #0F172A;
+            --text-body: #475569;
+            --border-color: #E2E8F0;
         }
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: var(--bg-color); 
-            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background-color: var(--surface-bg); 
+            color: var(--text-body);
             margin: 0;
-            padding: 40px 20px;
+            padding: 60px 20px;
         }
-        .container { 
-            max-width: 700px; 
+        .app-container { 
+            max-width: 650px; 
             margin: 0 auto; 
         }
-        .header {
+        .app-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: var(--primary-color);
+        .app-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            color: var(--text-heading);
+            margin: 0 0 10px 0;
         }
-        .header p {
-            color: var(--text-sub);
-            font-size: 1.1rem;
+        .app-header p {
+            color: var(--text-body);
+            font-size: 1.15rem;
+            margin: 0;
         }
-        .tool-card { 
+        .tool-suite-card { 
             background: var(--card-bg); 
-            padding: 30px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            margin-bottom: 25px;
-            text-align: left;
-            transition: transform 0.2s;
+            padding: 35px; 
+            border-radius: 16px; 
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
         }
-        .tool-card:hover {
-            transform: translateY(-2px);
+        .tool-suite-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-heading);
         }
-        .tool-card h3 {
-            margin-top: 0;
-            font-size: 1.3rem;
-            color: var(--text-main);
-        }
-        .tool-card p {
-            color: var(--text-sub);
+        .tool-suite-card p {
+            color: var(--text-body);
             font-size: 0.95rem;
-            margin-bottom: 20px;
+            margin: 0 0 24px 0;
+            line-height: 1.5;
         }
-        .file-input-wrapper {
-            margin-bottom: 15px;
+        .input-group {
+            margin-bottom: 20px;
         }
         input[type="file"] { 
             display: block;
             width: 100%;
-            padding: 10px;
-            background: #F3F4F6;
-            border-radius: 6px;
-            border: 1px dashed #D1D5DB;
+            padding: 12px;
+            background: #F1F5F9;
+            border-radius: 8px;
+            border: 2px dashed #CBD5E1;
             cursor: pointer;
+            box-sizing: border-box;
+            font-weight: 500;
         }
-        button { 
-            background-color: var(--primary-color); 
+        .dimension-inputs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .dimension-inputs input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #FAFAFA;
+        }
+        .dimension-inputs input:focus {
+            outline: 2px solid var(--brand-color);
+        }
+        .action-btn { 
+            background-color: var(--brand-color); 
             color: white; 
             border: none; 
-            padding: 12px 24px; 
+            padding: 14px 28px; 
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer; 
-            border-radius: 6px; 
+            border-radius: 8px; 
             width: 100%;
-            transition: background-color 0.2s;
+            transition: all 0.2s ease;
         }
-        button:hover { 
-            background-color: var(--primary-hover); 
+        .action-btn:hover { 
+            background-color: var(--brand-hover);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
-        footer {
+        .app-footer {
             text-align: center;
-            margin-top: 50px;
-            color: var(--text-sub);
+            margin-top: 60px;
+            color: #94A3B8;
             font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>SwiftTools AI</h1>
-            <p>Free, fast, and secure web tools for your daily tasks.</p>
+    <div class="app-container">
+        <div class="app-header">
+            <h1>OptiTools AI</h1>
+            <p>Lossless high-fidelity image & document processing engine.</p>
         </div>
 
-        <!-- Tool 1: Background Remover -->
-        <div class="tool-card">
+        <div class="tool-suite-card">
             <h3>1. AI Background Remover</h3>
-            <p>Instantly isolate your subject and remove solid backgrounds seamlessly.</p>
+            <p>Isolate subjects with 100% pixel precision using advanced cloud-based AI networks.</p>
             <form action="/remove-bg" method="post" enctype="multipart/form-data">
-                <div class="file-input-wrapper">
+                <div class="input-group">
                     <input type="file" name="image" accept="image/*" required>
                 </div>
-                <button type="submit">Remove Background</button>
+                <button type="submit" class="action-btn">Execute AI Background Removal</button>
             </form>
         </div>
 
-        <!-- Tool 2: Image Enhancer -->
-        <div class="tool-card">
-            <h3>2. Smart Image Enhancer</h3>
-            <p>Fix blurry photos by increasing sharpness and optimizing clarity.</p>
-            <form action="/clear-image" method="post" enctype="multipart/form-data">
-                <div class="file-input-wrapper">
+        <div class="tool-suite-card">
+            <h3>2. HD Image Resizer</h3>
+            <p>Resize images to targeted pixels using HD Lanczos interpolation. Zero blur guaranteed.</p>
+            <form action="/resize-image" method="post" enctype="multipart/form-data">
+                <div class="input-group">
                     <input type="file" name="image" accept="image/*" required>
                 </div>
-                <button type="submit">Enhance Quality</button>
-            </form>
-        </div>
-
-        <!-- Tool 3: PDF Converter -->
-        <div class="tool-card">
-            <h3>3. PDF Text Extractor</h3>
-            <p>Convert and extract readable text from your PDF files instantly.</p>
-            <form action="/pdf-to-img" method="post" enctype="multipart/form-data">
-                <div class="file-input-wrapper">
-                    <input type="file" name="pdf" accept=".pdf" required>
+                <div class="dimension-inputs">
+                    <input type="number" name="width" placeholder="Target Width (px)" required>
+                    <input type="number" name="height" placeholder="Target Height (px)" required>
                 </div>
-                <button type="submit">Extract Text</button>
+                <button type="submit" class="action-btn">Resize to Exact Dimensions</button>
             </form>
         </div>
 
-        <footer>
-            <p>&copy; 2026 SwiftTools AI. All rights reserved.</p>
-        </footer>
+        <div class="tool-suite-card">
+            <h3>3. Crystal-Clear Image to PDF</h3>
+            <p>Package photos into uncompressed, publication-grade PDF documents instantly.</p>
+            <form action="/image-to-pdf" method="post" enctype="multipart/form-data">
+                <div class="input-group">
+                    <input type="file" name="image" accept="image/*" required>
+                </div>
+                <button type="submit" class="action-btn">Generate High-Res PDF</button>
+            </form>
+        </div>
+
+        <div class="app-footer">
+            <p>&copy; 2026 OptiTools AI Studio. All processing is secure and encrypted.</p>
+        </div>
     </div>
 </body>
 </html>
