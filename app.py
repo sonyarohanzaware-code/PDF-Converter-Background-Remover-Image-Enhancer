@@ -9,7 +9,7 @@ import string
 app = Flask(__name__)
 
 # SECURITY NOTE: Replace with your actual remove.bg API key
-REMOVE_BG_API_KEY = "YOUR_ACTUAL_API_KEY_HERE"
+REMOVE_BG_API_KEY = "2eLnhvGX1or4voxbHCsLRYrE"
 
 @app.route('/')
 def home():
