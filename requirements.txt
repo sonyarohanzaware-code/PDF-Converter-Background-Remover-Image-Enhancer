@@ -3,3 +3,4 @@ Pillow
 pypdf
 gunicorn
 requests
+qrcode
